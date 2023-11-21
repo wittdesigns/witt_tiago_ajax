@@ -5,12 +5,10 @@
   const hotspots = document.querySelectorAll(".Hotspot");
 
 
-
-
   const materialTemplate = document.querySelector("#material-template");
   const materialList = document.querySelector("#material-list");
 
-
+  const loadingSpinner = document.getElementById('loading-spinner');
 
 
 
@@ -22,32 +20,53 @@
   }
 
 
+  function showLoadingSpinner() {
+    loadingSpinner.style.display = 'block';
+  }
+  function hideLoadingSpinner() {
+    loadingSpinner.style.display = 'none';
+  }
+
+
+  function handleErrors(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  }
+
+
+
+
+
   function loadInfoBoxes() {
     fetch("https://swiftpixel.com/earbud/api/infoboxes")
       .then(response => response.json())
       .then(infoBoxes => {
         console.log(infoBoxes);
 
-        infoBoxes.forEach((infoBox, index) => {
-          const selected = document.querySelector(`#hotspot-${index + 1}`);
 
+
+        infoBoxes.forEach((infoBox, index) => {
+
+
+          const selected = document.querySelector(`#hotspot-${index + 1}`);
           const titleElement = document.createElement('h2');
-          titleElement.textContent = infoBox.title;
+          titleElement.textContent = infoBox.heading;
 
           const textElement = document.createElement('p');
-          textElement.textContent = infoBox.text;
+          textElement.textContent = infoBox.description;
+
 
           selected.appendChild(titleElement);
           selected.appendChild(textElement);
           
+
+
         });
       })
 
   }
-
-
-
-
     loadInfoBoxes();
 
 
@@ -55,6 +74,8 @@
 
 
   function loadMaterialInfo() {
+    showLoadingSpinner();
+
     fetch("https://swiftpixel.com/earbud/api/materials")
     .then(response => response.json())
     .then(materialvar => {
@@ -71,11 +92,13 @@
 
           materialList.appendChild(clone);
 
-    })
-
-    })
-    .catch(error => console.error(error));
-    
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      })
+      .finally(() => {
+        hideLoadingSpinner();      });
 
   }
   loadMaterialInfo();
