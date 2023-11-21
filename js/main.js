@@ -26,6 +26,8 @@
     fetch("https://swiftpixel.com/earbud/api/infoboxes")
       .then(response => response.json())
       .then(infoBoxes => {
+        console.log(infoBoxes);
+
         infoBoxes.forEach((infoBox, index) => {
           const selected = document.querySelector(`#hotspot-${index + 1}`);
 
@@ -37,10 +39,13 @@
 
           selected.appendChild(titleElement);
           selected.appendChild(textElement);
+          
         });
       })
 
   }
+
+
 
 
     loadInfoBoxes();
@@ -66,7 +71,6 @@
 
           materialList.appendChild(clone);
 
-
     })
 
     })
@@ -74,8 +78,11 @@
     
 
   }
-
   loadMaterialInfo();
+
+
+
+  
 
   function showInfo() {
     let selected = document.querySelector(`#${this.slot}`);
